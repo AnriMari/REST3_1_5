@@ -1,12 +1,16 @@
 "use strict";
 
-const url = "http://localhost:8080/admin/users"
-
+const urlAdmin = "http://localhost:8080/admin/users"
+const urlUser = "http://localhost:8080/user"
 async function getAdminPage() {
-    let page = await fetch(url);
-    if (page.ok) {
-        let listAllUser = await page.json();
+    let adminPage = await fetch(urlAdmin);
+    let userPage = await fetch(urlUser);
+    if (adminPage.ok) {
+        let listAllUser = await adminPage.json();
         loadTableData(listAllUser);
+    } else if (userPage.ok) {
+            let listAllUser = await userPage.json();
+            loadTableData(listAllUser);
     } else {
         alert(`Error, ${page.status}`)
     }
@@ -162,7 +166,7 @@ async function addNewUser(event) {
             roles: listOfRole
         })
     }
-    await fetch(url, method).then(() => {
+    await fetch(urlAdmin, method).then(() => {
         form_new.reset();
         getAdminPage();
         activeTabContent('home-tab');
